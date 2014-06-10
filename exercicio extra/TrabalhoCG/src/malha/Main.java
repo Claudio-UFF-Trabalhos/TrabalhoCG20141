@@ -19,7 +19,7 @@ import util.projection.project;
 public class Main{
 
     // Creates a new cube
-    private final MeshGL mesh = new MeshGL("malhas/bimba.off");
+    private final MeshGL mesh = new MeshGL("malhas/bunny.off");
 
     // Animation:
     private float currentAngle = 0.0f;
@@ -113,7 +113,7 @@ public class Main{
         translationMatrix.m42 = -1.0f;
         translationMatrix1.m43 = -10.0f;
         
-        if(Mesh.isBunny)
+        if(mesh.isBunny())
         {
             currentScale = 0.1f;
         }
@@ -176,7 +176,7 @@ public class Main{
                 //modelViewMatrix.multiply(rotationMatrixY);
                 System.out.println("");
             }else{
-                if(Mesh.isBunny){
+                if(mesh.isBunny()){
                     modelViewMatrix.multiply(translationMatrix);
                 }
                 //modelViewMatrix.multiply(translationMatrix1);   

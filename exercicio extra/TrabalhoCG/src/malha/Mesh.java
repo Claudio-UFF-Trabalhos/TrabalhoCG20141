@@ -38,13 +38,19 @@ public class Mesh {
     
     private String file;
     
-    public static boolean isBunny;
+    private boolean Bunny;
     
     public Mesh(String file) {
         this.file = file;
         loadMesh(file);
         computeNormals();
     }
+    
+    public boolean isBunny()
+    {
+        return this.Bunny;
+    }
+    
     
     private void isBunnyModel()
     {
@@ -53,10 +59,10 @@ public class Mesh {
         String aux = file.substring(indexBarra+1, indexPonto);
         if(aux.equalsIgnoreCase("Bunny"))
         {
-            isBunny = true;
+            Bunny = true;
             System.out.println(aux);
         }else{
-            isBunny = false;
+            Bunny = false;
         }
     }
 
