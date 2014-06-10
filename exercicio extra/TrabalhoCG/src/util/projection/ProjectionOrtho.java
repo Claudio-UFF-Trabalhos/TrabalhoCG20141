@@ -6,6 +6,7 @@
 
 package util.projection;
 
+import util.math.FastMath;
 import util.math.Matrix4f;
 
 /**
@@ -13,26 +14,32 @@ import util.math.Matrix4f;
  * @author claudio
  */
 public class ProjectionOrtho implements project{
-    private float left;
-    private float right;
-    private float top;
-    private float bottom;
-    private float near;
-    private float far;
+    
+    private float fovY   = 0.0f;
+    private float aspect = 0.0f;
+    private float near  = 0.0f;
+    private float far   = 0.0f;
 
-    public ProjectionOrtho(float left, float right, float top, float bottom, float near, float far) {
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
-        this.near = near;
-        this.far = far;
+    public ProjectionOrtho(float fovY, float aspect, float zNear, float zFar) {
+        this.fovY   = fovY;
+        this.aspect = aspect;
+        this.near  = zNear;
+        this.far   = zFar;
     }
     
     @Override
     public Matrix4f perspective()
     {
         Matrix4f aux = new Matrix4f();
+        
+        float angle = fovY * FastMath.DEG_TO_RAD;
+        float tangent = FastMath.sin(angle) / FastMath.cos(angle);
+        
+        float top    = near * tangent; 
+        float right  = top * aspect;  
+        
+        float left = -right;
+        float bottom = -top;
         
         /* Primeira Linha */
         aux.m11 = 2/(right-left);

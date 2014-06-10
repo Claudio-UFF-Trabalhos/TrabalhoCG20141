@@ -36,13 +36,33 @@ public class Mesh {
     protected int nverts ;
     protected int nfaces ;
     
+    private String file;
+    
+    public static boolean isBunny;
+    
     public Mesh(String file) {
+        this.file = file;
         loadMesh(file);
         computeNormals();
+    }
+    
+    private void isBunnyModel()
+    {
+        int indexBarra = file.indexOf("/");
+        int indexPonto = file.indexOf(".");
+        String aux = file.substring(indexBarra+1, indexPonto);
+        if(aux.equalsIgnoreCase("Bunny"))
+        {
+            isBunny = true;
+            System.out.println(aux);
+        }else{
+            isBunny = false;
+        }
     }
 
     private void loadMesh(String file) {
         try {
+            isBunnyModel();
             Scanner scan;
 
             FileReader read = new FileReader(file);
@@ -57,10 +77,14 @@ public class Mesh {
 
             //Leitura do número de vertices
             int nvert = Integer.parseInt(scan.next());
+            
+            boolean novo = true;
 
             //Faces
             int tmp0 = Integer.parseInt(scan.next());
-            int tmp1 = Integer.parseInt(scan.next());
+            if(novo){
+                int tmp1 = Integer.parseInt(scan.next());
+            }
             
             for (int i = 0; i < nvert; i++) {
                 scan = new Scanner(buf.readLine());
@@ -69,6 +93,12 @@ public class Mesh {
                 float y = Float.parseFloat(scan.next());
                 float z = Float.parseFloat(scan.next());
                 
+                
+                if(!novo){
+                    float nx = Float.parseFloat(scan.next());
+                    float ny = Float.parseFloat(scan.next());
+                    float nz = Float.parseFloat(scan.next());
+                }
                 Vector4f p = new Vector4f(x,y,z,1.0f);
                 
                 Vertice v = new Vertice(p);
@@ -234,5 +264,14 @@ public class Mesh {
             normals.set(trigs.get(i+2), nm);
         }  
         */    
+    }
+    
+    private void calculaHEDGEIrma(){
+        for(int i = 0 ; i < hedges.size();i++ )
+        {
+            H_Edge oCara = hedges.get(i);
+            Vertice Origem = oCara.getpOrigem();
+            Vertice Proximo = oCara.getHeNext().getpOrigem();
+        }
     }
 }

@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/exercicio%20extra/TrabalhoCG/src/malha/MeshGL.java</file>
-            <file>file:/E:/exercicio%20extra/TrabalhoCG/src/malha/Mesh.java</file>
-            <file>file:/E:/exercicio%20extra/TrabalhoCG/src/util/projection/Projection.java</file>
-            <file>file:/E:/exercicio%20extra/TrabalhoCG/src/malha/Main.java</file>
-            <file>file:/E:/exercicio%20extra/TrabalhoCG/shaders/phong.vert</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/malha/Main.java</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/malha/MeshGL.java</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/util/projection/Projection.java</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/util/projection/ProjectionOrtho.java</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/malha/Mesh.java</file>
+            <file>file:/home/claudio/Downloads/exercicio%20extra/TrabalhoCG1/src/com/trabalho/armazenamento/Vertice.java</file>
         </group>
     </open-files>
 </project-private>

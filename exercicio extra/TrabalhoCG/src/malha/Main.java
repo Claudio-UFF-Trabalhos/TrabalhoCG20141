@@ -23,7 +23,7 @@ public class Main{
 
     // Animation:
     private float currentAngle = 0.0f;
-    private float currentScale = 0.5f;
+    private float currentScale = 1.0f;
     private float factor = 0.005f;
     
     // Projection Matrix
@@ -50,6 +50,7 @@ public class Main{
     private final Matrix4f rotationMatrixY = new Matrix4f();
     // Translation Matrix:
     private final Matrix4f translationMatrix = new Matrix4f();
+    private final Matrix4f translationMatrix1 = new Matrix4f();
     // Scale Matrix:
     private final Matrix4f scaleMatrix = new Matrix4f();
     
@@ -102,52 +103,25 @@ public class Main{
         GL11.glClearDepth(1.0f);
     }
 
-    public void run() {
+    public void run() throws InterruptedException {
         // Creates the vertex array object. 
         // Must be performed before shaders compilation.
         mesh.fillVAOs();
         mesh.loadShaders();
        
         // Model Matrix setup
-        translationMatrix.m41 = 0.8f;
-        int keyAtual = 0;
+        translationMatrix.m42 = -1.0f;
+        translationMatrix1.m43 = -10.0f;
         
-        boolean typeCam = false;
-        boolean typeProjection = false;
+        if(Mesh.isBunny)
+        {
+            currentScale = 0.1f;
+        }
+        
+        boolean typeCam = true;
+        boolean typeProjection = true;
         
         while (Display.isCloseRequested() == false) {
-            
-            if( Keyboard.next() /* && keyAtual != Keyboard.getEventKey() */){
-            
-                if(Keyboard.getEventKey() == Keyboard.KEY_C){
-                    if(!typeCam){
-                        cam = new Camera(eye1, at1, up1);
-                        mesh.setVector("eyePosition", eye1,4);
-                    }else{
-                        cam = new Camera(eye, at, up);
-                        mesh.setVector("eyePosition", eye,4);
-                    }
-                    typeCam = !typeCam;
-                }
-                
-                
-                if(Keyboard.getEventKey() == Keyboard.KEY_P){
-                    if(!typeProjection){
-                        proj = new ProjectionOrtho(-5, 5, 3, -3, -5, 5);
-                    }else{
-                        proj = new Projection(45, 1.3333f, 1.0f, 100.0f);
-                    }
-                    typeProjection = !typeProjection;
-                }
-                
-                keyAtual = Keyboard.getEventKey();
-            }
-            
-
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-            
-            projectionMatrix.setTo(proj.perspective());            
-            modelViewMatrix.setTo(cam.viewMatrix());
             
             currentAngle += 0.01f;
             float c = FastMath.cos(currentAngle);
@@ -159,7 +133,54 @@ public class Main{
             // second rotation
             rotationMatrixY.m11 = c; rotationMatrixY.m31 = s;
             rotationMatrixY.m13 =-s; rotationMatrixY.m33 = c;
+            
+            if( typeCam )
+            {
+                eye.x = 3*c;
+                eye.z = 3*s;
+            }
+            
+            if(Keyboard.isKeyDown(Keyboard.KEY_C)){
+                typeCam = !typeCam;
+                Thread.sleep(160);
+            }
+            
+            if(!typeCam){
+                cam = new Camera(eye1, at1, up1);
+                mesh.setVector("eyePosition", eye1,4);
+            }else{
+                cam = new Camera(eye, at, up);
+                mesh.setVector("eyePosition", eye,4);
+            }
 
+
+            if(Keyboard.isKeyDown(Keyboard.KEY_P)){
+                typeProjection = !typeProjection;
+                Thread.sleep(160);
+            }
+            
+            if(!typeProjection){
+                proj = new ProjectionOrtho(45, 1.3333f, 1.0f, 100.0f);
+            }else{
+                proj = new Projection(45, 1.3333f, 1.0f, 100.0f);
+            }
+            
+
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+            
+            projectionMatrix.setTo(proj.perspective());            
+            modelViewMatrix.setTo(cam.viewMatrix());
+            
+            
+            if(!typeCam){
+                //modelViewMatrix.multiply(rotationMatrixY);
+                System.out.println("");
+            }else{
+                if(Mesh.isBunny){
+                    modelViewMatrix.multiply(translationMatrix);
+                }
+                //modelViewMatrix.multiply(translationMatrix1);   
+            }
                      
             // scale
             scaleMatrix.m11 = currentScale;
@@ -167,9 +188,7 @@ public class Main{
             scaleMatrix.m33 = currentScale;
  
             //matrix stack
-            modelViewMatrix.multiply(rotationMatrixY);
-            modelViewMatrix.multiply(translationMatrix);
-            //modelViewMatrix.multiply(rotationMatrixZ);
+            //modelViewMatrix.multiply(rotationMatrixY);
             modelViewMatrix.multiply(scaleMatrix);
 
             normalMatrix.setTo(modelViewMatrix);
@@ -200,7 +219,7 @@ public class Main{
      * @param args
      * @throws org.lwjgl.LWJGLException
      */
-    public static void main(String[] args) throws LWJGLException {
+    public static void main(String[] args) throws LWJGLException, InterruptedException {
         Main example = new Main();
         example.initGl();
         example.run();
