@@ -73,5 +73,12 @@ public class Vertice {
         this.normal.y+=normal.y;
         this.normal.z+=normal.z;
     }
+    
+    public boolean isEqual( Vertice Comp)
+    {
+        Vector4f pThis = getP();
+        Vector4f pComp = Comp.getP();
+        return (pThis.x == pComp.x && pThis.y == pComp.y && pThis.z == pComp.z && pThis.w == pComp.w);
+    }
 
 }

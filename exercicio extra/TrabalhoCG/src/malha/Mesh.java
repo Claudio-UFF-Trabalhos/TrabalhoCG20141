@@ -14,9 +14,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import util.math.Vector4f;
 
 /**
@@ -35,15 +37,19 @@ public class Mesh {
     
     protected int nverts ;
     protected int nfaces ;
-    
+    private int count;
     private String file;
+    private int irmaCount;
     
     private boolean Bunny;
+    
+    private final HashMap<Integer,H_Edge> m_HEdgeTwin = new HashMap<>();
     
     public Mesh(String file) {
         this.file = file;
         loadMesh(file);
         computeNormals();
+        //calculaHEDGEIrma();
     }
     
     public boolean isBunny()
@@ -60,7 +66,6 @@ public class Mesh {
         if(aux.equalsIgnoreCase("Bunny"))
         {
             Bunny = true;
-            System.out.println(aux);
         }else{
             Bunny = false;
         }
@@ -114,6 +119,7 @@ public class Mesh {
             }
             int contfaces = 0;
             String line;
+            int key = 1000000;
             while ( (line = buf.readLine()) != null ) {
                 scan = new Scanner(line);
 
@@ -134,6 +140,42 @@ public class Mesh {
                     
                     Face a = new Face(h0);
                     
+                    int value;
+                    
+                    value = i1*key+i0;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h0);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i1*key+i0;
+                        m_HEdgeTwin.put(value, h0);
+                    }
+                    value = i2*key+i1;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h1);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i1*key+i2;
+                        m_HEdgeTwin.put(value, h1);
+                    }
+                    value = i0*key+i2;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h2);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i0*key+i2;
+                        m_HEdgeTwin.put(value, h2);
+                    }
+                    /*FIM HASH PRIMEIRO POLIGONO*/
                     
                     h0.setHeNext(h1);
                     h0.setF(a);
@@ -167,7 +209,45 @@ public class Mesh {
                     H_Edge h2 = new H_Edge(verts.get(i2));
                     
                     Face a = new Face(h0);
+
                     
+                    /*INICIO HASH PRIEMIRO*/
+                    int value;
+                    
+                    value = i1*key+i0;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h0);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i0*key+i1;
+                        m_HEdgeTwin.put(value, h0);
+                    }
+                    value = i2*key+i1;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h1);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i1*key+i2;
+                        m_HEdgeTwin.put(value, h1);
+                    }
+                    value = i0*key+i2;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h2);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i2*key+i0;
+                        m_HEdgeTwin.put(value, h2);
+                    }
+                    /*FIM HASH PRIMEIRO POLIGONO*/
                     
                     h0.setHeNext(h1);
                     h0.setF(a);
@@ -191,6 +271,42 @@ public class Mesh {
                     
                     Face b = new Face(h3);
                     
+                    /*INICIO HASH PRIEMIRO*/
+                    
+                    value = i2*key+i0;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h3);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i0*key+i2;
+                        m_HEdgeTwin.put(value, h3);
+                    }
+                    value = i3*key+i2;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h4);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i2*key+i3;
+                        m_HEdgeTwin.put(value, h4);
+                    }
+                    value = i3*key+i0;
+                    if(m_HEdgeTwin.containsKey(value))
+                    {
+                        H_Edge aux = m_HEdgeTwin.get(value);
+                        aux.setHeTwin(h5);
+                        h0.setHeTwin(aux);
+                        irmaCount++;
+                    }else{
+                        value=i0*key+i3;
+                        m_HEdgeTwin.put(value, h5);
+                    }
+                    /*FIM HASH PRIMEIRO POLIGONO*/
                     
                     h3.setHeNext(h4);
                     h3.setF(b);
@@ -229,7 +345,8 @@ public class Mesh {
             he = new HalfEdge(verts,faces);
             he.setHedges(hedges);
             nfaces = faces.size();
-
+            System.out.println(irmaCount);
+            System.out.println(hedges.size());
         } catch (IOException ex) {
             Logger.getLogger(Mesh.class.getName()).log(Level.SEVERE, null, ex);
         }    
@@ -273,11 +390,20 @@ public class Mesh {
     }
     
     private void calculaHEDGEIrma(){
-        for(int i = 0 ; i < hedges.size();i++ )
+        System.out.println(hedges.size());
+        for(int i = 0 ; i < hedges.size()-1;i++ )
         {
             H_Edge oCara = hedges.get(i);
-            Vertice Origem = oCara.getpOrigem();
-            Vertice Proximo = oCara.getHeNext().getpOrigem();
+            for (int j = +1; j < hedges.size(); j++) {
+                H_Edge oIrmao = hedges.get(j);
+                if(oCara.isTwin(oIrmao))
+                {
+                    oCara.setHeTwin(oIrmao);
+                    oIrmao.setHeTwin(oCara);
+                    System.out.println(count++);
+                    break;
+                }
+            }
         }
     }
 }

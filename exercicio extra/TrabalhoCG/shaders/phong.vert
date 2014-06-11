@@ -4,9 +4,6 @@ uniform mat4 NormalMatrix;
 uniform mat4 ModelViewMatrix;
 uniform mat4 ProjectionMatrix;
 
-uniform vec3 normalCam;
-uniform vec3 positionCam;
-uniform vec3 eyePositionCam;
 
 uniform vec4 eyePosition;
 

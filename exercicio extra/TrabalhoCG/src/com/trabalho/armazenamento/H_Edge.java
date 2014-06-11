@@ -69,5 +69,14 @@ public class H_Edge {
         this.f = f;
     }
     
-    
+    public boolean isTwin(H_Edge comparada)
+    {
+       Vertice pOri = heNext.getpOrigem();
+       Vertice pNext = getpOrigem();
+       
+       Vertice CompOri = comparada.getpOrigem();
+       Vertice CompNext = comparada.getHeNext().getpOrigem();
+       
+       return (pOri.isEqual(CompOri) && pNext.isEqual(CompNext));
+    }
 }
