@@ -345,8 +345,8 @@ public class Mesh {
             he = new HalfEdge(verts,faces);
             he.setHedges(hedges);
             nfaces = faces.size();
-            System.out.println(irmaCount);
-            System.out.println(hedges.size());
+            //System.out.println(irmaCount);
+            //System.out.println(hedges.size());
         } catch (IOException ex) {
             Logger.getLogger(Mesh.class.getName()).log(Level.SEVERE, null, ex);
         }    
